@@ -27,3 +27,5 @@ playbook.yml
     - { role: setup/amazon_linux2, tags: setup/amazon_linux2 }
 ```
 
+### setup/amazon_linux2
+Amazon Linux 2向け初期セットアップロール
