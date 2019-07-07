@@ -1,0 +1,27 @@
+- name: install the epel repository
+  become: true
+  command: amazon-linux-extras install epel
+  args:
+    creates: /etc/yum.repos.d/epel.repo
+
+- name: set timezone to Asia/Tokyo
+  become: true
+  timezone:
+    name: Asia/Tokyo
+
+- name: get locale
+  command: localectl status
+  register: locale_result
+  changed_when: false
+  check_mode: false
+
+# すべてのサーバーとアプリケーションで新しい時間帯情報を取得するには、システムの再起動が必要
+- name: set locale to "Asia/Tokyo"
+  become: true
+  command: localectl set-locale LANG=ja_JP.utf8
+  when: "'System Locale: LANG=ja_JP.utf8' not in locale_result.stdout"
+
+# インベントリファイルでName_tag変数を設定する
+- name: set hostname
+  become: true
+  hostname: name={{ Name_tag }}
